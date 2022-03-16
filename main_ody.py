@@ -77,7 +77,9 @@ def checkmissions():
             try:
                 pyautogui.click('neededimages/bertselectedO.png')         #check one last time
                 time.sleep(1)
-                pyautogui.click(x=1434, y=882)  #also only works in 1920x1080
+                #pyautogui.click(x=1434, y=882)  #also only works in 1920x1080
+                pyautogui.press('s') #potential solution to line 80, can't test it at time of writing tho
+                pyautogui.press('space')
             except:
                 print('none found, moving on')
                 x = 1
@@ -87,6 +89,7 @@ def checkmissions():
     pydirectinput.press('backspace')
     print("done")
     #needs check to see if missions are full
+
 
 
 def main():
