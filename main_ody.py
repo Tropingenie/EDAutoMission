@@ -19,6 +19,8 @@ import pytesseract
 
 pytesseract.pytesseract.tesseract_cmd = r'P:/Tesseract-OCR/tesseract.exe'
 
+total = 0
+
 #check for edhm as it might mess it up. i think the keybind to disable it is shift+F1 but i don't use it in ody
 #todo
 
@@ -77,8 +79,7 @@ def checkmissions():
             try:
                 pyautogui.click('neededimages/bertselectedO.png')         #check one last time
                 time.sleep(1)
-                #pyautogui.click(x=1434, y=882)  #also only works in 1920x1080
-                pyautogui.press('s') #potential solution to line 80, can't test it at time of writing tho
+                pyautogui.press('d') #accepts mission
                 pyautogui.press('space')
             except:
                 print('none found, moving on')
@@ -95,7 +96,7 @@ def main():
     while total != 20: #hopefully checks for missions, needs testing
         #run every 10 mins when boards flip
         schedule.every(10).minutes.do(checkmissions) #Run every 10 mins (maybe change to do top of the 10 mins so it doesn't break during a flip)
-    schedule.run_all() #start now
+    schedule.run_all() #start now. doesn't seem to work
 
 
 if(__name__ == "__main__"):
