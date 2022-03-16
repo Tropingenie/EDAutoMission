@@ -88,13 +88,13 @@ def checkmissions():
     pydirectinput.press('backspace')
     pydirectinput.press('backspace')
     print("done")
-    #needs check to see if missions are full
 
 
 
 def main():
-    #run every 10 mins when boards flip
-    schedule.every(10).minutes.do(checkmissions) #Run every 10 mins (maybe change to do top of the 10 mins so it doesn't break during a flip)
+    while total != 20: #hopefully checks for missions, needs testing
+        #run every 10 mins when boards flip
+        schedule.every(10).minutes.do(checkmissions) #Run every 10 mins (maybe change to do top of the 10 mins so it doesn't break during a flip)
     schedule.run_all() #start now
 
 
