@@ -1,16 +1,50 @@
-from PIL import Image, ImageGrab
-from matplotlib.pyplot import pause
-import numpy as np
-import cv2
+# main_ody.py
+# by ImpeccablePenguin, Pon Pon
+# Purpose: Run the main auto mission selection functionality in E:D Odyssey
+
+
+from ast import parse
+import time
+import os
+import logging
+
+import schedule
 import pyautogui
 import pydirectinput
-import time
-import schedule
+import numpy as np
+# import cv2
+from PIL import Image
+# from matplotlib.pyplot import pause
+import pytesseract
 
-total = 0
+pytesseract.pytesseract.tesseract_cmd = r'P:/Tesseract-OCR/tesseract.exe'
 
 #check for edhm as it might mess it up. i think the keybind to disable it is shift+F1 but i don't use it in ody
 #todo
+
+
+def parse_selected_mission():
+    """
+    Locates the selected mission on the board, and runs it through OCR.
+
+    :return: Dump of all the text detected in the image
+    :raises: Probably will raise an error if the image is not found
+    """
+    # Locate the mission that is selected and take a screenshot of it.
+    # Confidence is low so as to catch all missions.
+    selected = pyautogui.locateOnScreen("neededimages/orange.png",
+                                        confidence=0.4)
+    pyautogui.screenshot("temp_screenshot.png", region=selected)
+
+    # Run the screenshot through OCR and save it to a variable
+    text = pytesseract.image_to_string(
+        np.array(Image.open("temp_screenshot.png"))
+        )
+    os.remove("temp_screenshot.png")  # Delete the temp file
+
+    logging.debug(text)
+    return text
+
 
 def checkmissions():
     #select missions
@@ -54,10 +88,14 @@ def checkmissions():
     print("done")
     #needs check to see if missions are full
 
-#run every 10 mins when boards flip
-schedule.every(10).minutes.do(checkmissions) #Run every 10 mins (maybe change to do top of the 10 mins so it doesn't break during a flip)
-schedule.run_all() #start now
 
-while True:  #main loop
-    schedule.run_pending() #scheduler has a pending function
-    time.sleep(1) #check every 1 seconds
+def main():
+    #run every 10 mins when boards flip
+    schedule.every(10).minutes.do(checkmissions) #Run every 10 mins (maybe change to do top of the 10 mins so it doesn't break during a flip)
+    schedule.run_all() #start now
+
+
+if(__name__ == "__main__"):
+    logging.basicConfig(level=logging.DEBUG)
+    main()
+    # parse_selected_mission() # debug
