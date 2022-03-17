@@ -12,12 +12,12 @@ import schedule
 import pyautogui
 import pydirectinput
 import numpy as np
-# import cv2
+import cv2
 from PIL import Image
 # from matplotlib.pyplot import pause
 import pytesseract
 
-pytesseract.pytesseract.tesseract_cmd = r'P:/Tesseract-OCR/tesseract.exe'
+pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 
 total = 0
 
@@ -34,7 +34,7 @@ def parse_selected_mission():
     """
     # Locate the mission that is selected and take a screenshot of it.
     # Confidence is low so as to catch all missions.
-    selected = pyautogui.locateOnScreen("neededimages/orange.png",
+    selected = pyautogui.locateOnScreen("neededimages/orange2.png",
                                         confidence=0.4)
     pyautogui.screenshot("temp_screenshot.png", region=selected)
 
@@ -71,7 +71,6 @@ def checkmissions():
         except:
             print('none found, moving on')
 
-        print('moving down')
         pydirectinput.press('s')
 
         #tell if bottom has been reached 
@@ -91,12 +90,58 @@ def checkmissions():
     print("done")
 
 
+def checkmissionsOCR():
+    #select missions
+    pydirectinput.press('space')
+    pydirectinput.press('space')
+    time.sleep(2)
+
+    pydirectinput.press('d') 
+    pydirectinput.press('d')
+    pydirectinput.press('space') #changes filter to transport
+    time.sleep(5) #delay because sometimes it lags
+
+    #main mission checking loop
+    x = 0
+    while x != 1:
+        #select and parse mission
+        try:
+            missiontext = parse_selected_mission()
+            print(missiontext)
+            if missiontext.contains("BERTRANDITE"):
+                pyautogui.press('space')
+                pyautogui.press('d')
+                pyautogui.press('space') #accepts mission
+            else:
+                print("not found")
+        except:
+            print("failed to parse, moving on")
+
+        pydirectinput.press('s')
+
+        #tell if bottom has been reached 
+        if pyautogui.pixelMatchesColor(1306, 910, (168, 73, 0)):  #this will only work on 1920x1080 displays so that must be fixed
+            try:
+                missiontext = parse_selected_mission()
+                print(missiontext)
+                if missiontext.contains("BERTRANDITE"):
+                    pyautogui.press('space')
+                    pyautogui.press('d')
+                    pyautogui.press('space') #accepts mission
+                else:
+                    print("not found")
+            except:
+                print("failed to parse, moving on")
+                x = 1
+    #exit to refresh
+    pydirectinput.press('backspace')
+    pydirectinput.press('backspace')
+    print("done")
 
 def main():
-    while total != 20: #hopefully checks for mission count, needs testing
-        #run every 10 mins when boards flip
-        schedule.every(10).minutes.do(checkmissions) #Run every 10 mins (maybe change to do top of the 10 mins so it doesn't break during a flip)
-    schedule.run_all() #start now. doesn't seem to work
+    schedule.every(10).minutes.do(checkmissions) #Run every 10 mins (maybe change to do top of the 10 mins so it doesn't break during a flip)
+    # schedule.every(10).minutes.do(checkmissionsOCR) #Unfinished OCR version. kinda works
+    schedule.run_all() #start now
 
 
 if(__name__ == "__main__"):
