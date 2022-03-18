@@ -17,35 +17,29 @@ from PIL import Image
 # from matplotlib.pyplot import pause
 import pytesseract
 
-pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
+import OCR
+
+
+# Find tesseract
+# TODO: Pull this out into user settings so users/devs can set the path easily
+tesseract_path = None
+potential_paths = [r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe',
+                   r"P:\\Tesseract-OCR\\tesseract.exe"]
+for _path in potential_paths:
+    if os.path.isfile(tesseract_path):
+        tesseract_path = _path
+if tesseract_path is None:
+    logging.error("No valid tesseract.exe was found")
+
+pytesseract.pytesseract.tesseract_cmd = tesseract_path
+
+# TODO: Intelligently select this based on screen resolution
+selected_mission_sample = r"neededimages\\orange2.png"
 
 total = 0
 
 #check for edhm as it might mess it up. i think the keybind to disable it is shift+F1 but i don't use it in ody
 #todo
-
-
-def parse_selected_mission():
-    """
-    Locates the selected mission on the board, and runs it through OCR.
-
-    :return: Dump of all the text detected in the image
-    :raises: Probably will raise an error if the image is not found
-    """
-    # Locate the mission that is selected and take a screenshot of it.
-    # Confidence is low so as to catch all missions.
-    selected = pyautogui.locateOnScreen("neededimages/orange2.png",
-                                        confidence=0.4)
-    pyautogui.screenshot("temp_screenshot.png", region=selected)
-
-    # Run the screenshot through OCR and save it to a variable
-    text = pytesseract.image_to_string(
-        np.array(Image.open("temp_screenshot.png"))
-        )
-    os.remove("temp_screenshot.png")  # Delete the temp file
-
-    logging.debug(text)
-    return text
 
 
 def checkmissions():
@@ -96,7 +90,7 @@ def checkmissionsOCR():
     pydirectinput.press('space')
     time.sleep(2)
 
-    pydirectinput.press('d') 
+    pydirectinput.press('d')
     pydirectinput.press('d')
     pydirectinput.press('space') #changes filter to transport
     time.sleep(5) #delay because sometimes it lags
@@ -106,7 +100,7 @@ def checkmissionsOCR():
     while x != 1:
         #select and parse mission
         try:
-            missiontext = parse_selected_mission()
+            missiontext = OCR.parse_selected_mission(selected_mission_sample)
             print(missiontext)
             if missiontext.contains("BERTRANDITE"):
                 pyautogui.press('space')
@@ -122,7 +116,7 @@ def checkmissionsOCR():
         #tell if bottom has been reached 
         if pyautogui.pixelMatchesColor(1306, 910, (168, 73, 0)):  #this will only work on 1920x1080 displays so that must be fixed
             try:
-                missiontext = parse_selected_mission()
+                missiontext = OCR.parse_selected_mission(selected_mission_sample)
                 print(missiontext)
                 if missiontext.contains("BERTRANDITE"):
                     pyautogui.press('space')
