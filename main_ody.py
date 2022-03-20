@@ -17,7 +17,7 @@ from PIL import Image
 # from matplotlib.pyplot import pause
 import pytesseract
 
-import OCR
+import helper_functions
 
 
 # Find tesseract
@@ -100,7 +100,7 @@ def checkmissionsOCR():
     while x != 1:
         #select and parse mission
         try:
-            missiontext = OCR.parse_selected_mission(selected_mission_sample)
+            missiontext = helper_functions.parse_selected_mission(selected_mission_sample)
             print(missiontext)
             if missiontext.contains("BERTRANDITE"):
                 pyautogui.press('space')
@@ -116,7 +116,7 @@ def checkmissionsOCR():
         #tell if bottom has been reached 
         if pyautogui.pixelMatchesColor(1306, 910, (168, 73, 0)):  #this will only work on 1920x1080 displays so that must be fixed
             try:
-                missiontext = OCR.parse_selected_mission(selected_mission_sample)
+                missiontext = helper_functions.parse_selected_mission(selected_mission_sample)
                 print(missiontext)
                 if missiontext.contains("BERTRANDITE"):
                     pyautogui.press('space')
