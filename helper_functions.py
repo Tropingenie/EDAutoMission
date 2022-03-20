@@ -50,13 +50,24 @@ def prep_reference_images():
 
     for _file in os.listdir(res_dir):
         copy(
-            os.path.join(res_dir, _file),
+            os.path.join(res_dir, _file),  # Copy will only copy files
             "neededimages"
             )
 
     return (screenWidth, screenHeight)
 
+def cleanup_reference_images():
+    """
+    Deletes all files in the ./neededimages folder, leaving folders intact
+    """
+    for i in os.listdir("neededimages"):
+        i = os.path.join("neededimages",i)
+        if os.path.isfile(i):
+            logging.debug("Attempting to remove \"{}\"".format(i))
+            os.remove(i)
+
 # Running this file as a script is for debug purposes only
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
-    prep_reference_images()
+    # prep_reference_images()
+    # cleanup_reference_images()
