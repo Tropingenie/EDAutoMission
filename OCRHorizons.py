@@ -24,20 +24,13 @@ def parse_selected_mission():
     # Confidence is low so as to catch all missions.
     selected = pyautogui.locateOnScreen("neededimages/mission.png",confidence=0.4)
     im = pyautogui.screenshot("temp_screenshot.png", region=selected)
-    im1 = Image.open("comp_shot.png")
-    im2 = Image.open("temp_screenshot.png")
-    
-    if list(im1.getdata()) == list(im2.getdata()):
-        break  
     
     # Run the screenshot through OCR and save it to a variable
     text = pytesseract.image_to_string(np.array(Image.open("temp_screenshot.png")))
-    im.save("comp_shot.png")
     os.remove("temp_screenshot.png")# Delete the temp file
 
     logging.debug(text)
     logging.debug(selected)
-    pyautogui.press("up")
     return text
 
 def setup(m, faction): 
@@ -52,12 +45,13 @@ def setup(m, faction):
         pyautogui.press("left", presses=4, interval=0.5)
         pyautogui.press("down", presses=7, interval=0.5)#Reset to origin, which the the back button
         logging.debug("Set mode to transport, returned to origin")
-        print("done") 
+        
     if faction == "rook":
         pyautogui.press("left", presses=3 ,interval=0.3)
         pyautogui.press("down", presses=8 ,interval=0.3)
         pyautogui.press("up", presses=5, interval=0.5)
-        pyautogui.press("down", presses=1, interval=0.5)   
+        pyautogui.press("down", presses=1, interval=0.5)  
+        pyautogui.press("space")
         pyautogui.press("right")
         logging.debug("Set faction to Rook Platoon")
         
@@ -65,22 +59,26 @@ def setup(m, faction):
         pyautogui.press("left", presses=3 ,interval=0.3)
         pyautogui.press("down", presses=8 ,interval=0.3)
         pyautogui.press("up", presses=5, interval=0.5)
-        pyautogui.press("down", presses=2, interval=0.5)   
+        pyautogui.press("down", presses=2, interval=0.5) 
+        pyautogui.press("space")
         pyautogui.press("right")
         logging.debug("Set faction to Bureau of Apotanites Flag")
-    if faction == "coop":
+        
+    if faction == "coop": 
         pyautogui.press("left", presses=3 ,interval=0.3)
         pyautogui.press("down", presses=8 ,interval=0.3)
         pyautogui.press("up", presses=5, interval=0.5)
-        pyautogui.press("down", presses=3, interval=0.5)   
+        pyautogui.press("down", presses=3, interval=0.5) 
+        pyautogui.press("space")
         pyautogui.press("right")
+        logging.debug("Set faction to Bureau of Apotanites Flag")
         
     else:
         logging.debug("No faction chosen")
         
 
 #win_id = xdo.search_windows(winname="EliteDangerous6")
-time.sleep(10) 
-#print(parse_selected_mission())
-setup(1,"rook")
-print(time.asctime() + " Mission Set")
+time.sleep(10)
+parse_selected_mission()
+#setup(1,"rook")
+print(time.asctime() + " Mission Set") 
