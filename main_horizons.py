@@ -24,8 +24,8 @@ pydirectinput.press('space')
 
 #change filter to reduce time
 pydirectinput.press('a')
-for x in range (0,10):
-    pydirectinput.press('w')   #since it starts on the bottom, make sure to move past the factions. Hopefully there won't be more than 9 or this will fail
+for x in range (0,8):
+    pydirectinput.press('w')   #since it starts on the bottom, make sure to move past the factions. Hopefully there won't be more than 7(?) or this will fail
     x = x + 1
 pydirectinput.press('space')
 pydirectinput.press('s')
