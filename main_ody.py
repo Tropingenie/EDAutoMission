@@ -3,35 +3,22 @@
 # Purpose: Run the main auto mission selection functionality in E:D Odyssey
 
 
-from ast import parse
+# from ast import parse
 import time
-import os
+# import os
 import logging
 
 import schedule
 import pyautogui
 import pydirectinput
-import numpy as np
-import cv2
-from PIL import Image
+# import numpy as np
+# import cv2
+# from PIL import Image
 # from matplotlib.pyplot import pause
-import pytesseract
+# import pytesseract
 
 import helper_functions
 
-
-# Find tesseract
-# TODO: Pull this out into user settings so users/devs can set the path easily
-tesseract_path = None
-potential_paths = [r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe',
-                   r"P:\\Tesseract-OCR\\tesseract.exe"]
-for _path in potential_paths:
-    if os.path.isfile(tesseract_path):
-        tesseract_path = _path
-if tesseract_path is None:
-    logging.error("No valid tesseract.exe was found")
-
-pytesseract.pytesseract.tesseract_cmd = tesseract_path
 
 # TODO: Intelligently select this based on screen resolution
 selected_mission_sample = r"neededimages\\orange2.png"
@@ -96,12 +83,11 @@ def checkmissionsOCR():
     time.sleep(5) #delay because sometimes it lags
 
     #main mission checking loop
-    x = 0
-    while x != 1:
+    while True:
         #select and parse mission
         try:
             missiontext = helper_functions.parse_selected_mission(selected_mission_sample)
-            print(missiontext)
+            logging.debug(missiontext)
             if missiontext.contains("BERTRANDITE"):
                 pyautogui.press('space')
                 pyautogui.press('d')
@@ -117,7 +103,7 @@ def checkmissionsOCR():
         if pyautogui.pixelMatchesColor(1306, 910, (168, 73, 0)):  #this will only work on 1920x1080 displays so that must be fixed
             try:
                 missiontext = helper_functions.parse_selected_mission(selected_mission_sample)
-                print(missiontext)
+                logging.debug(missiontext)
                 if missiontext.contains("BERTRANDITE"):
                     pyautogui.press('space')
                     pyautogui.press('d')
@@ -126,7 +112,7 @@ def checkmissionsOCR():
                     print("not found")
             except:
                 print("failed to parse, moving on")
-                x = 1
+                break
     #exit to refresh
     pydirectinput.press('backspace')
     pydirectinput.press('backspace')
@@ -139,6 +125,6 @@ def main():
 
 
 if(__name__ == "__main__"):
-    logging.basicConfig(level=logging.DEBUG)
+    helper_functions.module_setup()
     main()
     # parse_selected_mission() # debug

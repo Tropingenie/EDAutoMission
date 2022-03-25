@@ -12,6 +12,27 @@ import pytesseract
 import numpy as np
 from PIL import Image
 
+def module_setup():
+    """
+    Set up all modules that requires setup.
+    """
+    # Set logging level to debug
+    logging.basicConfig(level=logging.DEBUG)
+
+    # Set up tesseract
+    # TODO: Pull this out into user settings so users/devs can set the path easily
+    tesseract_path = None
+    potential_paths = [r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe',
+                       r"P:\\Tesseract-OCR\\tesseract.exe"]
+    for _path in potential_paths:
+        if os.path.isfile(tesseract_path):
+            tesseract_path = _path
+            break
+    if tesseract_path is None:
+        logging.error("No valid tesseract.exe was found")
+    else:
+        pytesseract.pytesseract.tesseract_cmd = tesseract_path
+
 def parse_selected_mission(selected_mission_sample):
     """
     Locates the selected mission on the board, and runs it through OCR.
@@ -68,6 +89,6 @@ def cleanup_reference_images():
 
 # Running this file as a script is for debug purposes only
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
+    module_setup()
     # prep_reference_images()
     # cleanup_reference_images()
