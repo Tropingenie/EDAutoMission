@@ -22,10 +22,11 @@ def module_setup():
     # Set up tesseract
     # TODO: Pull this out into user settings so users/devs can set the path easily
     tesseract_path = None
-    potential_paths = [r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe',
-                       r"P:\\Tesseract-OCR\\tesseract.exe"]
+    potential_paths = [os.path.join("C:", "Program Files", "Tesseract-OCR", "tesseract.exe"),
+                       os.path.join("P:", "Tesseract-OCR", "tesseract.exe")]
     for _path in potential_paths:
-        if os.path.isfile(tesseract_path):
+        logging.debug("Checking \"{}\" for tesseract.exe".format(_path))
+        if os.path.isfile(_path):
             tesseract_path = _path
             break
     if tesseract_path is None:
