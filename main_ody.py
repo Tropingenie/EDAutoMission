@@ -86,7 +86,7 @@ def checkmissionsOCR():
 
     #main mission checking loop
     # Exits when the orange scroll bar reaches bottom
-    while not pyautogui.pixelMatchesColor(int(screenWidth/1.4701), int(screenHeight/1.1868), (168, 73, 0)):
+    while not pyautogui.pixelMatchesColor(int(screenWidth/5.8986), int(screenHeight/1.1268), (255, 111, 0)):
         #select and parse mission
         try:
             missiontext = helper_functions.parse_selected_mission(selected_mission_sample)
@@ -102,6 +102,8 @@ def checkmissionsOCR():
 
         pydirectinput.press('s')
 
+    # TODO: Check the mission board one last time before exiting to scan the last mission
+
     #exit to refresh
     pydirectinput.press('backspace')
     pydirectinput.press('backspace')
@@ -114,6 +116,7 @@ def main():
 
 
 if(__name__ == "__main__"):
+    time.sleep(1)  # Give some time for user to alt tab
     helper_functions.module_setup()
     screenWidth, screenHeight = helper_functions.prep_reference_images()
     # main()
