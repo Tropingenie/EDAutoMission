@@ -24,4 +24,5 @@ For development/testing purposes:
   - Have a GUI and standalone application
   - Add configurations for missions of other commodities/types
   - Horizons support (in progress)
-  - Extend support for resolutions other than 1920x1080 (in progress)
+  - Extend support to aspect ratios other than 16:9
+  - Extend support to cockpit colors other than the default
