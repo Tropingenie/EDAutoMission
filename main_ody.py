@@ -4,6 +4,7 @@
 
 
 # from ast import parse
+from lib2to3.pytree import Base
 from tabnanny import check
 import time
 # import os
@@ -79,8 +80,8 @@ def checkmissionsOCR():
     pydirectinput.press('space', interval=0.6)
     time.sleep(2)
 
-    pydirectinput.press('d', interval=0.6)
-    pydirectinput.press('d', interval=0.6)
+    pydirectinput.press('d', interval=0.9)
+    pydirectinput.press('d', interval=0.9)
     pydirectinput.press('space', interval=0.6) #changes filter to transport
     time.sleep(5) #delay because sometimes it lags
 
@@ -120,6 +121,10 @@ if(__name__ == "__main__"):
     helper_functions.module_setup()
     screenWidth, screenHeight = helper_functions.prep_reference_images()
     # main()
-    checkmissionsOCR() # debug
-    helper_functions.cleanup_reference_images()
+    try:
+        while True:
+            checkmissionsOCR() # debug
+            time.sleep(600) # Wait for 10 minutes
+    finally:
+        helper_functions.cleanup_reference_images()
     # parse_selected_mission() # debug
