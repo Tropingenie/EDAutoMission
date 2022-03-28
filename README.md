@@ -7,9 +7,9 @@ Currently, there are no builds available.
 
 For development/testing purposes:
 1. Ensure Python 3 is installed
-2. Pull repo
+2. Clone the repo
 4. [Install Tesseract](https://github.com/tesseract-ocr/tessdoc/blob/main/Installation.md)
-3. \[PLACEHOLDER FOR USER SETTINGS]: If Tesseract was not installed to the default location (`C:\\Program Files\\Tesseract-OCR\\tesseract.exe`) then modify `helper_functions.setup()` to try the path
+    - It is recommended to install to the default path (C:/Program Files/Tesseract) however, if installing to a different drive ensure that you install directly to the drive, i.e. to `D:/Tesseract` (where `D:` is the drive you are installing Tesseract to)
 3. Install requirements (`pip install -r requirements.txt`)
 
 ## How to use:
@@ -17,7 +17,14 @@ For development/testing purposes:
 2. Make sure mission board is selected (see image, below)
 3. Tab over to your terminal
 4. Start program (`python main_ody.py`)
-5. Tab back to the game
+5. Tab back to the game within 5 seconds
+
+![Screenshot of starting state](https://cdn.discordapp.com/attachments/945223875279601687/957878152657526784/unknown.png)
+
+## Current Features
+- Odyssey support through CLI (run as script)
+- Automatically checks and accepts missions for Bertrandite, Gold, and Silver every 10 minutes
+- 16:9 resolutions supported: 720p, 1080p, 2160p
 
 ## Roadmap/Plans
 (Subject to change, though if its possible by my knowledge it will be added)
