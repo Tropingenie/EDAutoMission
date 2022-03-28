@@ -76,14 +76,12 @@ def checkmissions():
 
 def checkmissionsOCR():
     #select missions
-    pydirectinput.press('space', interval=0.6)
-    pydirectinput.press('space', interval=0.6)
+    pydirectinput.press('space', presses=2, interval=0.6)
     time.sleep(2)
 
-    pydirectinput.press('d', interval=0.9)
-    pydirectinput.press('d', interval=0.9)
+    pydirectinput.press('d', presses=2, interval=0.9)
     pydirectinput.press('space', interval=0.6) #changes filter to transport
-    time.sleep(5) #delay because sometimes it lags
+    time.sleep(5) #delay to account for load time
 
     #main mission checking loop
     # Exits when the orange scroll bar reaches bottom
@@ -94,7 +92,7 @@ def checkmissionsOCR():
             logging.debug("Detected text: {}".format(missiontext))
             if "BERTRANDITE" in missiontext:
                 logging.info("Mission detected.")
-                pydirectinput.press('space', 2)  # accepts mission
+                pydirectinput.press('space', presses=2, interval=0.3)  # accepts mission
             else:
                 logging.info("not found")
         except Exception as e:  # TODO: Figure out what exceptions we expect and catch only those
@@ -106,8 +104,7 @@ def checkmissionsOCR():
     # TODO: Check the mission board one last time before exiting to scan the last mission
 
     #exit to refresh
-    pydirectinput.press('backspace')
-    pydirectinput.press('backspace')
+    pydirectinput.press('backspace', presses=2, interval=0.3)
     logging.info("done")
 
 def main():
