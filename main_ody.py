@@ -91,10 +91,10 @@ def checkmissionsOCR():
             missiontext = helper_functions.parse_selected_mission(selected_mission_sample)
             logging.debug("Detected text: {}".format(missiontext))
             if "BERTRANDITE" in missiontext:
-                logging.info("Mission detected.")
+                logging.info("Bread detected.")
                 pydirectinput.press('space', presses=2, interval=0.3)  # accepts mission
             else:
-                logging.info("not found")
+                logging.info("Not bread")
         except Exception as e:  # TODO: Figure out what exceptions we expect and catch only those
             logging.info("failed to parse, moving on")
             logging.error(e)
@@ -114,14 +114,19 @@ def main():
 
 
 if(__name__ == "__main__"):
-    time.sleep(1)  # Give some time for user to alt tab
+    time.sleep(5)  # Give some time for user to alt tab
     helper_functions.module_setup()
     screenWidth, screenHeight = helper_functions.prep_reference_images()
     # main()
     try:
         while True:
-            checkmissionsOCR() # debug
-            time.sleep(600) # Wait for 10 minutes
+            logging.debug("Current minute reading is: {}".format(time.gmtime()[4]))
+            # To check every 10 minutes, we look when the clock reads the 5 minute mark
+            # e.g. for 1:55, time.gmtime()[4] will be 55, 55+5=60, 60%10 == 0
+            if ((time.gmtime()[4] + 5) % 10 == 0):
+                logging.info("Checking missions...")
+                checkmissionsOCR() # debug
+            time.sleep(20) # Slows loop rate to thrice per minute
     finally:
         helper_functions.cleanup_reference_images()
     # parse_selected_mission() # debug
