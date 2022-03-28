@@ -5,6 +5,7 @@
 
 import logging
 import os
+from string import ascii_uppercase as alphabet
 from shutil import copy
 
 import pyautogui
@@ -20,10 +21,15 @@ def module_setup():
     logging.basicConfig(level=logging.DEBUG)
 
     # Set up tesseract
-    # TODO: Pull this out into user settings so users/devs can set the path easily
+    # TODO?: Pull this out into user settings so users/devs can set the path easily
     tesseract_path = None
-    potential_paths = [os.path.join("C:", "Program Files", "Tesseract-OCR", "tesseract.exe"),
-                       os.path.join("P:", "Tesseract-OCR", "tesseract.exe")]
+    potential_paths = [os.path.join("C:", "Program Files", "Tesseract-OCR", "tesseract.exe")]
+    # Use list comprehension to generate paths of the form
+    # "D:/Tesseract-OCR/tesseract.exe" for all possible drive letters
+    potential_paths.extend(
+                       [os.path.join("{}:".format(drive_letter), "Tesseract-OCR", "tesseract.exe") for drive_letter in alphabet]
+                       )
+    logging.debug("Potential paths: {}".format(potential_paths))
     for _path in potential_paths:
         logging.debug("Checking \"{}\" for tesseract.exe".format(_path))
         if os.path.isfile(_path):
