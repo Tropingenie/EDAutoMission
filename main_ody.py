@@ -90,7 +90,7 @@ def checkmissionsOCR():
         try:
             missiontext = helper_functions.parse_selected_mission(selected_mission_sample)
             logging.debug("Detected text: {}".format(missiontext))
-            if "BERTRANDITE" in missiontext:
+            if "BERTRANDITE" in missiontext or "GOLD" in missiontext or "SILVER" in missiontext:
                 logging.info("Bread detected.")
                 pydirectinput.press('space', presses=2, interval=0.3)  # accepts mission
             else:
