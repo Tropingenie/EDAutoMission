@@ -92,12 +92,16 @@ def checkmissionsOCR():
             logging.debug("Detected text: {}".format(missiontext))
             if "BERTRANDITE" in missiontext or "GOLD" in missiontext or "SILVER" in missiontext:
                 logging.info("Bread detected.")
+                total += 1
                 pydirectinput.press('space', presses=2, interval=0.3)  # accepts mission
             else:
                 logging.info("Not bread")
         except Exception as e:  # TODO: Figure out what exceptions we expect and catch only those
             logging.info("failed to parse, moving on")
             logging.error(e)
+
+        if total == 20:
+            break
 
         pydirectinput.press('s')
 
@@ -126,6 +130,8 @@ if(__name__ == "__main__"):
             if ((time.gmtime()[4] + 5) % 10 == 0):
                 logging.info("Checking missions...")
                 checkmissionsOCR() # debug
+            if total == 20:
+                break
             time.sleep(20) # Slows loop rate to thrice per minute
     finally:
         helper_functions.cleanup_reference_images()
