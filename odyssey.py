@@ -2,16 +2,19 @@
 # By Pon Pon
 # Low level implementation of main script functionalities for Odyssey
 
+import logging
 from time import sleep
-from matplotlib.pyplot import cla
 
 from pydirectinput import press
-from pyautogui import pixelMatchesColor
+from pyautogui import screenshot
+from numpy import array
+from numpy import sum as array_sum
 
 from helper_functions import screenHeight, screenWidth, ocr_screen_location
 
 class OdysseyHelper:
     missions_seen = 0
+    back_button_original = None
 
     @classmethod
     def open_missions_board(cls):
@@ -25,8 +28,38 @@ class OdysseyHelper:
 
     @classmethod
     def at_bottom(cls):
-        # TODO: Find a way to make this cockpit colour agnostic
-        return pixelMatchesColor(int(screenWidth/5.8986), int(screenHeight/1.1268), (255, 111, 0))
+        if cls.back_button_original is None:
+            cls.back_button_original = array(screenshot(
+                region=(
+                    int(screenWidth*235/3840),
+                    int(screenHeight*1868/2160),
+                    int(screenWidth*666/3840),
+                    int(screenHeight*90/2160)
+                )
+            ))
+        back_button_new = array(screenshot(
+            region=(
+                int(screenWidth*235/3840),
+                int(screenHeight*1868/2160),
+                int(screenWidth*666/3840),
+                int(screenHeight*90/2160)
+            )
+        ))
+
+        logging.debug("Original:")
+        logging.debug(cls.back_button_original)
+        logging.debug("New:")
+        logging.debug(back_button_new)
+
+        # Calculate the Mean Squared Error between the two images (i.e. the
+        # average error between all the pixels). This looks complicated, but it
+        # is just taking the square of the difference divided by the total
+        # number of pixels in the arrays.
+        # See https://pyimagesearch.com/2014/09/15/python-compare-two-images/
+        # for a more in-depth explanation
+        mse = array_sum((cls.back_button_original.astype("float") - back_button_new.astype("float")) ** 2)/float(cls.back_button_original.shape[0] * back_button_new.shape[1])
+        logging.debug("mse = {}".format(mse))
+        return mse > 1
 
     @classmethod
     def ocr_mission(cls):
@@ -66,3 +99,8 @@ class OdysseyHelper:
     def return_to_starport(cls):
         cls.missions_seen = 0
         press('backspace', presses=2, interval=0.3)
+
+# Run as script for debug only
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG)
+    OdysseyHelper.at_bottom()
