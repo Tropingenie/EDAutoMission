@@ -16,6 +16,8 @@ import numpy as np
 from PIL import Image
 from psutil import process_iter
 
+screenWidth, screenHeight = pyautogui.size()  # Get the size of the primary monitor.
+
 def module_setup():
     """
     Set up all modules that requires setup.
@@ -78,7 +80,6 @@ def prep_reference_images():
 
     :return: 2 tuple containing (width, height) or None if the resolution is not supported yet
     """
-    screenWidth, screenHeight = pyautogui.size()  # Get the size of the primary monitor.
     res_dir = os.path.join("neededimages", "{}p".format(screenHeight))
 
     if not os.path.isdir(res_dir):
@@ -108,7 +109,6 @@ def game_running():
         # logging.debug(process.name())
         if "elitedangerous" in process.name().lower():
             logging.debug(process)
-            screenWidth, screenHeight = pyautogui.size()
             pydirectinput.press('esc', interval=0.6)  # Open pause menu
             check_for_odyssey = ocr_screen_location(  # Look at logo in top left
                 (int(0.09583*screenWidth),int(0.1361*screenHeight),
