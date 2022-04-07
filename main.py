@@ -12,6 +12,7 @@ import helper_functions
 missions = 0  # Tracks number of missions accepted
 
 def main():
+    global missions
     game_interaction.open_missions_board()
     while not game_interaction.at_bottom():
         mission_text = game_interaction.ocr_mission()
@@ -29,7 +30,7 @@ if __name__ == "__main__":
         import horizons as game_interaction
         logging.debug("Operating in Horizons mode")
     elif game_mode == "odyssey":
-        import odyssey as game_interaction
+        from odyssey import OdysseyHelper as game_interaction
     else:
         raise OSError("Elite: Dangerous not running!")
     sleep(5) # Wait for user to alt-tab to Elite window
