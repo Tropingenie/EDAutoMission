@@ -5,13 +5,16 @@
 
 import logging
 import os
-from string import ascii_uppercase as alphabet
+from string import ascii_uppercase as ALPHABET
 from shutil import copy
+from time import sleep
 
 import pyautogui
+import pydirectinput
 import pytesseract
 import numpy as np
 from PIL import Image
+from psutil import process_iter
 
 def module_setup():
     """
@@ -27,7 +30,7 @@ def module_setup():
     # Use list comprehension to generate paths of the form
     # "D:/Tesseract-OCR/tesseract.exe" for all possible drive letters
     potential_paths.extend(
-                       [os.path.join("{}:".format(drive_letter), "Tesseract-OCR", "tesseract.exe") for drive_letter in alphabet]
+                       [os.path.join("{}:".format(drive_letter), "Tesseract-OCR", "tesseract.exe") for drive_letter in ALPHABET]
                        )
     logging.debug("Potential paths: {}".format(potential_paths))
     for _path in potential_paths:
@@ -51,13 +54,19 @@ def parse_selected_mission(selected_mission_sample):
     # Confidence is low so as to catch all missions.
     selected = pyautogui.locateOnScreen(selected_mission_sample,
                                         confidence=0.4)
-    pyautogui.screenshot("temp_screenshot.png", region=selected)
+
+    return ocr_screen_location(selected)
+
+def ocr_screen_location(selected):
+    """
+    Perform OCR on the selected region of the main monitor
+
+    :return: Dump of the text detected by OCR
+    """
+    screen = pyautogui.screenshot(region=selected)
 
     # Run the screenshot through OCR and save it to a variable
-    text = pytesseract.image_to_string(
-        np.array(Image.open("temp_screenshot.png"))
-        )
-    os.remove("temp_screenshot.png")  # Delete the temp file
+    text = pytesseract.image_to_string(screen)
 
     logging.debug(text)
     return text
@@ -94,8 +103,30 @@ def cleanup_reference_images():
             logging.debug("Attempting to remove \"{}\"".format(i))
             os.remove(i)
 
+def game_running():
+    for process in process_iter():
+        # logging.debug(process.name())
+        if "elitedangerous" in process.name().lower():
+            logging.debug(process)
+            screenWidth, screenHeight = pyautogui.size()
+            pydirectinput.press('esc', interval=0.6)  # Open pause menu
+            check_for_odyssey = ocr_screen_location(  # Look at logo in top left
+                (int(0.09583*screenWidth),int(0.1361*screenHeight),
+                 int(0.20625*screenWidth),int(0.10278*screenHeight))
+            )
+            pydirectinput.press('esc', interval=0.2)  # Close pause menu
+            return("odyssey" if "odyssey" in check_for_odyssey.lower() else "horizons")
+        elif "edlaunch" in process.name().lower():
+            logging.debug(process)
+
+    raise OSError("Elite: Dangerous is not running!")
+
+
 # Running this file as a script is for debug purposes only
 if __name__ == "__main__":
-    module_setup()
+    sleep(1)
+    module_setup() # Leave this uncommented even in testing
     # prep_reference_images()
     # cleanup_reference_images()
+    logging.debug(game_running())
+    # ocr_screen_location((0,0,445,324))
