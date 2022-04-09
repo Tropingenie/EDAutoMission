@@ -35,16 +35,16 @@ if __name__ == "__main__":
         raise OSError("Elite: Dangerous not running!")
     sleep(5) # Wait for user to alt-tab to Elite window
 
+    missions = game_interaction.check_missions_accepted()
+
     main() # Initial check
 
-    while True:
+    while missions < 20:
         logging.debug("Current minute reading is: {}".format(gmtime()[4]))
         # To check every 10 minutes, we look when the clock reads the 5 minute mark
         # e.g. for 1:55, time.gmtime()[4] will be 55, 55+5=60, 60%10 == 0
         if ((gmtime()[4] + 5) % 10 == 0):
             logging.info("Checking missions...")
             main() # debug
-            if missions == 20:
-                break
         sleep(20) # Slows loop rate to thrice per minute
 

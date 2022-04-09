@@ -11,6 +11,7 @@ from numpy import array
 from numpy import sum as array_sum
 
 from helper_functions import screenHeight, screenWidth, ocr_screen_location
+from horizons import at_bottom, next_mission
 
 class OdysseyHelper:
     missions_seen = 0
@@ -100,7 +101,36 @@ class OdysseyHelper:
         cls.missions_seen = 0
         press('backspace', presses=2, interval=0.3)
 
+    @classmethod
+    def check_missions_accepted(cls):
+        mission_count = 0
+        # Open mission depot
+        press('space', presses=2, interval=0.3)
+        sleep(5)  # Delay to account for load time
+        press('d', presses=3, interval=0.3)
+        press('s', presses=1, interval=0.3)
+        press('space', presses=1, interval=0.3)
+
+        # Either mission depot is open, or pit is not and pressing s will bring
+        # us to the bottom
+
+        cls.at_bottom() # Need to do this to ensure back_button_original is populated
+        cls.next_mission()
+        if(cls.at_bottom()):
+            pass  # Mission count is zero, can return as-is
+        else:
+            mission_count = 1
+            while not cls.at_bottom():
+                mission_count += 1
+                cls.next_mission()
+        press('backspace', presses=2, interval=0.3)
+
+        logging.debug("Detected {} missions".format(mission_count))
+        return mission_count
+
 # Run as script for debug only
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
-    OdysseyHelper.at_bottom()
+    import helper_functions
+    sleep(5)
+    helper_functions.module_setup()
+    OdysseyHelper.check_missions_accepted()
