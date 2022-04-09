@@ -5,7 +5,7 @@
 # minutes) in a DLC agnostic manner.
 
 import logging
-from time import sleep
+from time import sleep, gmtime
 
 import helper_functions
 
@@ -34,5 +34,17 @@ if __name__ == "__main__":
     else:
         raise OSError("Elite: Dangerous not running!")
     sleep(5) # Wait for user to alt-tab to Elite window
+
     main() # Initial check
-    # helper_functions.call_every_10(main) # Call main once every 10 minutes
+
+    while True:
+        logging.debug("Current minute reading is: {}".format(gmtime()[4]))
+        # To check every 10 minutes, we look when the clock reads the 5 minute mark
+        # e.g. for 1:55, time.gmtime()[4] will be 55, 55+5=60, 60%10 == 0
+        if ((gmtime()[4] + 5) % 10 == 0):
+            logging.info("Checking missions...")
+            main() # debug
+            if missions == 20:
+                break
+        sleep(20) # Slows loop rate to thrice per minute
+
