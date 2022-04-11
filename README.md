@@ -9,15 +9,20 @@ For development/testing purposes:
 1. Ensure Python 3 is installed
 2. Clone the repo
 4. [Install Tesseract](https://github.com/tesseract-ocr/tessdoc/blob/main/Installation.md)
-    - It is recommended to install to the default path (C:/Program Files/Tesseract) however, if installing to a different drive ensure that you install directly to the drive, i.e. to `D:/Tesseract` (where `D:` is the drive you are installing Tesseract to)
+    - It is recommended to install to the default path (`C:/Program Files/Tesseract`), however, if installing to a different drive, ensure that you install directly to the drive, i.e. to `D:/Tesseract` (where `D:` is the drive you are installing Tesseract to)
 3. Install requirements (`pip install -r requirements.txt`)
 
 ## How to use:
 1. Dock and click starport services
 2. Make sure mission board is selected (see image, below)
 3. Tab over to your terminal
-4. Start program (`python main_ody.py` for suppourtes resolutions or `python main.py` for experimental branch)
+4. Start program (`python main_ody.py` for current features or `python main.py` for experimental branch)
 5. Tab back to the game within 5 seconds
+
+To prematurely exit the program:
+1. Wait for the script to finish checking missions, if it is doing so
+1. Alt tab back to the terminal
+2. Manually interrupt the program (`ctrl-c` on most terminals)
 
 ![Screenshot of starting state](https://cdn.discordapp.com/attachments/945223875279601687/957878152657526784/unknown.png)
 
