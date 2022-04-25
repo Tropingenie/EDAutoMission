@@ -108,20 +108,23 @@ class OdysseyHelper:
         # Open mission depot
         press('space', presses=2, interval=0.3)
         sleep(5)  # Delay to account for load time
-        press('d', presses=3, interval=0.3)
-        press('s', presses=1, interval=0.3)
-        press('space', presses=1, interval=0.3)
 
-        # Either mission depot is open, or pit is not and pressing s will bring
-        # us to the bottom
+        # If the mission depot doesn't exist, then 0 missions
+        if "MISSION DEPOT" not in ocr_screen_location(
+            [
+                int(2956*screenWidth/3840),
+                int(1720*screenHeight/2160),
+                int(400*screenWidth/3840),
+                int(80*screenWidth/2160)
+            ]
+        ):
+            return 0
 
-        cls.at_bottom() # Need to do this to ensure back_button_original is populated
-        cls.next_mission()
-        if(cls.at_bottom()):
-            # Mission count is zero, can return as-is
-            press('backspace', presses=1, interval=0.3)  # Return to local services
-        else:
-            mission_count = 1
+        else: # Open mission depot
+            press('d', presses=3, interval=0.3)
+            press('s', presses=1, interval=0.3)
+            press('space', presses=1, interval=0.3)
+
             while not cls.at_bottom():
                 mission_count += 1
                 cls.next_mission()
