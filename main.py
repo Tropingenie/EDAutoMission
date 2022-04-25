@@ -24,6 +24,8 @@ def main():
     game_interaction.return_to_starport()
 
 if __name__ == "__main__":
+    sleep(5) # Wait for user to alt-tab to Elite window
+
     helper_functions.module_setup()
     game_mode = helper_functions.game_running()
     if game_mode == "horizons":
@@ -33,9 +35,10 @@ if __name__ == "__main__":
         from odyssey import OdysseyHelper as game_interaction
     else:
         raise OSError("Elite: Dangerous not running!")
-    sleep(5) # Wait for user to alt-tab to Elite window
 
     missions = game_interaction.check_missions_accepted()
+
+    sleep(1)  # Brief pause to prevent errors
 
     main() # Initial check
 

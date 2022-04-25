@@ -47,10 +47,10 @@ class OdysseyHelper:
             )
         ))
 
-        logging.debug("Original:")
-        logging.debug(cls.back_button_original)
-        logging.debug("New:")
-        logging.debug(back_button_new)
+        # logging.debug("Original:")
+        # logging.debug(cls.back_button_original)
+        # logging.debug("New:")
+        # logging.debug(back_button_new)
 
         # Calculate the Mean Squared Error between the two images (i.e. the
         # average error between all the pixels). This looks complicated, but it
@@ -99,6 +99,7 @@ class OdysseyHelper:
     @classmethod
     def return_to_starport(cls):
         cls.missions_seen = 0
+        cls.back_button_original = None  # Reset this to force a new screenshot for every board refresh
         press('backspace', presses=2, interval=0.3)
 
     @classmethod
@@ -117,13 +118,17 @@ class OdysseyHelper:
         cls.at_bottom() # Need to do this to ensure back_button_original is populated
         cls.next_mission()
         if(cls.at_bottom()):
-            pass  # Mission count is zero, can return as-is
+            # Mission count is zero, can return as-is
+            press('backspace', presses=1, interval=0.3)  # Return to local services
         else:
             mission_count = 1
             while not cls.at_bottom():
                 mission_count += 1
                 cls.next_mission()
-        press('backspace', presses=2, interval=0.3)
+            press('backspace', presses=2, interval=0.3)
+
+        cls.back_button_original = None
+        cls.missions_seen = 0
 
         logging.debug("Detected {} missions".format(mission_count))
         return mission_count
