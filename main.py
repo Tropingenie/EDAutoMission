@@ -5,49 +5,83 @@
 # minutes) in a DLC agnostic manner.
 
 import logging
-from time import sleep, gmtime
+from time import sleep, localtime 
+from queue import Empty
 
 import helper_functions
 
 missions = 0  # Tracks number of missions accepted
 
-def main():
+def _main(game_interaction):
     global missions
+
+    def _accept_mission(mission_type):
+        logging.info("{} mission detected. Accepting...".format(mission_type))
+        game_interaction.accept_mission()
+        missions += 1
+
+    logging.info("Checking missions...")
+
     game_interaction.open_missions_board()
     while not game_interaction.at_bottom():
         mission_text = game_interaction.ocr_mission()
-        if "BERT" in mission_text or "GOLD" in mission_text or "SILVER" in mission_text:
-            game_interaction.accept_mission()
-            missions += 1
+        if "BERT" in mission_text:
+            _accept_mission("Bertrandite")
+        elif "GOLD" in mission_text:
+            _accept_mission("Gold")
+        elif "SILVER" in mission_text:
+            _accept_mission("Silver")
+
         game_interaction.next_mission()
-# Note: at_bottom() must be set up to avoid an off by one error
+    # Note: at_bottom() must be set up to avoid an off by one error
     game_interaction.return_to_starport()
 
-if __name__ == "__main__":
+    logging.info("Mission check complete.")
+
+def main():
     sleep(5) # Wait for user to alt-tab to Elite window
 
     helper_functions.module_setup()
     game_mode = helper_functions.game_running()
     if game_mode == "horizons":
         import horizons as game_interaction
-        logging.debug("Operating in Horizons mode")
+        logging.info("Operating in Horizons mode")
     elif game_mode == "odyssey":
         from odyssey import OdysseyHelper as game_interaction
+        logging.info("Operating in Odyssey mode")
     else:
         raise OSError("Elite: Dangerous not running!")
 
     missions = game_interaction.check_missions_accepted()
+    logging.info("Detected that {} missions already in depot.".format(missions))
 
     sleep(1)  # Brief pause to prevent errors
 
-    main() # Initial check
+    _main(game_interaction) # Initial check
+    logging.info(
+        "Script will now be run every 10 minutes, on the 5 minute mark (e.g. {}:{})".format(
+            int(localtime()[3]),
+            int(round(localtime()[4], -1))+5
+            )
+        )
 
     while missions < 20:
-        logging.debug("Current minute reading is: {}".format(gmtime()[4]))
+        logging.debug("Current minute reading is: {}".format(localtime()[4]))
         # To check every 10 minutes, we look when the clock reads the 5 minute mark
         # e.g. for 1:55, time.gmtime()[4] will be 55, 55+5=60, 60%10 == 0
-        if ((gmtime()[4] + 5) % 10 == 0):
-            logging.info("Checking missions...")
-            main() # debug
+        if ((localtime()[4] + 5) % 10 == 0):
+            _main(game_interaction) # debug
+            mission_count_update = True
+        if mission_count_update:
+            mission_count_update = False
+            logging.info("{} missions in depot.".format(missions))
+            logging.info("Next update at {}:{}".format(
+                int(localtime()[3]),
+                int(round(localtime()[4], -1))+5
+                )
+            )
         sleep(20) # Slows loop rate to thrice per minute
+
+if __name__ == "__main__":
+    main()
 
