@@ -4,7 +4,6 @@
 # from https://github.com/PySimpleGUI/PySimpleGUI/blob/master/DemoPrograms/Demo_Multithreaded_Logging.py
 
 import logging
-import queue
 import threading
 from queue import Queue, Empty
 
@@ -22,7 +21,12 @@ class ThreadedApp(threading.Thread):
         self._stop_event = threading.Event()
 
     def run(self):
-        main()
+        # Note: In production, we want the system to mask any exceptions instead of crashing.
+        try:
+            main()
+        except Exception as e:
+            logging.error("Error: {}".format(e))
+            raise # Reraise the error to prevent masking
 
     def stop(self):
         self._stop_event.set()

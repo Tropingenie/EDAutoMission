@@ -109,18 +109,20 @@ def game_running():
         # logging.debug(process.name())
         if "elitedangerous" in process.name().lower():
             logging.debug(process)
-            pydirectinput.press('esc', interval=0.6)  # Open pause menu
-            check_for_odyssey = ocr_screen_location(  # Look at logo in top left
-                (int(0.09583*screenWidth),int(0.1361*screenHeight),
-                 int(0.20625*screenWidth),int(0.10278*screenHeight))
-            )
-            pydirectinput.press('esc', interval=0.2)  # Close pause menu
-            return("odyssey" if "odyssey" in check_for_odyssey.lower() else "horizons")
+            return True
         elif "edlaunch" in process.name().lower():
             logging.debug(process)
 
-    raise OSError("Elite: Dangerous is not running!")
+    return False
 
+def game_mode():
+    pydirectinput.press('esc', interval=0.6)  # Open pause menu
+    check_for_odyssey = ocr_screen_location(  # Look at logo in top left
+        (int(0.09583*screenWidth),int(0.1361*screenHeight),
+         int(0.20625*screenWidth),int(0.10278*screenHeight))
+        )
+    pydirectinput.press('esc', interval=0.2)  # Close pause menu
+    return("odyssey" if "odyssey" in check_for_odyssey.lower() else "horizons")
 
 # Running this file as a script is for debug purposes only
 if __name__ == "__main__":

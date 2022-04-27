@@ -8,3 +8,4 @@ schedule==1.1.0
 pytesseract==0.3.9
 psutil==5.9.0
 pysimpleguiqt==0.35.0
+pywin32==303
