@@ -3,26 +3,31 @@ Automatically accepts missions of a type
 (This is a work in progress so expect bugs)
 
 ## Installation
-Currently, there are no builds available.
+There are two ways to run the program: As a python script, or the built code. The raw python supports both command-line and gui control, while the built .exe only can be run through the gui. 
 
-For development/testing purposes:
+### For development/testing purposes:
 1. Ensure Python 3 is installed
 2. Clone the repo
 4. [Install Tesseract](https://github.com/tesseract-ocr/tessdoc/blob/main/Installation.md)
     - It is recommended to install to the default path (`C:/Program Files/Tesseract`), however, if installing to a different drive, ensure that you install directly to the drive, i.e. to `D:/Tesseract` (where `D:` is the drive you are installing Tesseract to)
 3. Install requirements (`pip install -r requirements.txt`)
 
+### Built GUI Version
+1. Download the .exe file from the releases section
+4. [Install Tesseract](https://github.com/tesseract-ocr/tessdoc/blob/main/Installation.md)
+    - It is recommended to install to the default path (`C:/Program Files/Tesseract`), however, if installing to a different drive, ensure that you install directly to the drive, i.e. to `D:/Tesseract` (where `D:` is the drive you are installing Tesseract to)
+
 ## How to use:
 1. Dock and click starport services
 2. Make sure mission board is selected (see image, below)
-3. Tab over to your terminal
-4. Start program (`python main_ody.py` for current features or `python main.py` for experimental branch)
-5. Tab back to the game within 5 seconds
+3. Go to the GUI or your terminal
+4. Run the script (`python main_ody.py` for current features or `python main.py` for experimental branch), or click the go button on the GUI
+5. (non-Windows only) Tab back to the game within 5 seconds
 
 To prematurely exit the program:
 1. Wait for the script to finish checking missions, if it is doing so
-1. Alt tab back to the terminal
-2. Manually interrupt the program (`ctrl-c` on most terminals)
+1. Alt tab back to the terminal or GUI
+2. Manually interrupt the program (`ctrl-c` on most terminals), or click the exit button
 
 ![Screenshot of starting state](https://cdn.discordapp.com/attachments/945223875279601687/957878152657526784/unknown.png)
 
