@@ -44,6 +44,7 @@ def _main(game_interaction):
     logging.info("Mission check complete.")
 
 def main():
+    global missions
     helper_functions.module_setup()
     if not helper_functions.game_running():
         raise OSError("Elite: Dangerous not running!")
@@ -84,6 +85,7 @@ def main():
             )
         )
 
+    mission_count_update = False
     while missions < 20:
         logging.debug("Current minute reading is: {}".format(localtime()[4]))
         # To check every 10 minutes, we look when the clock reads the 5 minute mark

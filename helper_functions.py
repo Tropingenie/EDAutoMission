@@ -116,12 +116,14 @@ def game_running():
     return False
 
 def game_mode():
-    pydirectinput.press('esc', interval=0.6)  # Open pause menu
+    pydirectinput.press('esc', presses=2, interval=0.6)  # Open pause menu
     check_for_odyssey = ocr_screen_location(  # Look at logo in top left
         (int(0.09583*screenWidth),int(0.1361*screenHeight),
          int(0.20625*screenWidth),int(0.10278*screenHeight))
         )
-    pydirectinput.press('esc', interval=0.2)  # Close pause menu
+    pydirectinput.press('esc', interval=0.5)  # Close pause menu
+    pydirectinput.press('space', interval=0.5)  # Reopen starport services
+    sleep(1) # Pause to let starport services load
     return("odyssey" if "odyssey" in check_for_odyssey.lower() else "horizons")
 
 # Running this file as a script is for debug purposes only

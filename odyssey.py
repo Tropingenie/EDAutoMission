@@ -100,13 +100,13 @@ class OdysseyHelper:
     def return_to_starport(cls):
         cls.missions_seen = 0
         cls.back_button_original = None  # Reset this to force a new screenshot for every board refresh
-        press('backspace', presses=2, interval=0.3)
+        press('backspace', presses=2, interval=0.5)
 
     @classmethod
     def check_missions_accepted(cls):
         mission_count = 0
         # Open mission depot
-        press('space', presses=2, interval=0.3)
+        press('space', presses=2, interval=0.5)
         sleep(5)  # Delay to account for load time
 
         # If the mission depot doesn't exist, then 0 missions
