@@ -15,8 +15,11 @@ if system() == "Windows":
     from pywintypes import error as PyWinError
     from tab_to import tab_to
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 8ed5719 (Skip automatic focus; attempt bug fixes)
 def _main(game_interaction):
     missions = 0
 
@@ -51,6 +54,7 @@ def main():
         raise OSError("Elite: Dangerous not running!")
 
     try:
+        raise OSError("Win 11 debug")
         if system() == "Windows":
             tab_to("Elite.+Dangerous.+CLIENT")
             sleep(1)
@@ -92,7 +96,11 @@ def main():
         # To check every 10 minutes, we look when the clock reads the 5 minute mark
         # e.g. for 1:55, time.gmtime()[4] will be 55, 55+5=60, 60%10 == 0
         if ((localtime()[4] + 5) % 10 == 0):
+<<<<<<< HEAD
             missions += _main(game_interaction)
+=======
+            missions += _main(game_interaction) # debug
+>>>>>>> 8ed5719 (Skip automatic focus; attempt bug fixes)
             mission_count_update = True
         if mission_count_update:
             mission_count_update = False
