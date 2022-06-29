@@ -65,7 +65,7 @@ def ocr_screen_location(selected):
 
     :return: Dump of the text detected by OCR
     """
-    screen = pyautogui.screenshot(region=selected)
+    screen = pyautogui.screenshot(region=selected, imageFilename="ocr_debug.png")
 
     # Run the screenshot through OCR and save it to a variable
     text = pytesseract.image_to_string(screen)
@@ -129,8 +129,8 @@ def game_mode():
 # Running this file as a script is for debug purposes only
 if __name__ == "__main__":
     sleep(1)
-    module_setup() # Leave this uncommented even in testing
+    # module_setup() # Leave this uncommented even in testing
     # prep_reference_images()
     # cleanup_reference_images()
-    logging.debug(game_running())
-    # ocr_screen_location((0,0,445,324))
+    # logging.debug(game_running())
+    ocr_screen_location((0,0,445,324))
