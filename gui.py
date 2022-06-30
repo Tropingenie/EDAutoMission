@@ -42,7 +42,10 @@ class QueueHandler(logging.Handler):
 
 
 if __name__ == "__main__":
-    helper_functions.module_setup()
+    try:
+        helper_functions.module_setup()
+    except NotImplementedError as e:
+        logging.error(e)
 
     output = sg.Output()
 
