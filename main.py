@@ -91,7 +91,11 @@ def main():
         # To check every 10 minutes, we look when the clock reads the 5 minute mark
         # e.g. for 1:55, time.gmtime()[4] will be 55, 55+5=60, 60%10 == 0
         if ((localtime()[4] + 5) % 10 == 0):
+<<<<<<< HEAD
             missions += _main(game_interaction)
+=======
+            missions += _main(game_interaction) # debug
+>>>>>>> 8ed57194759b01256798772b38cd47cac170f3e8
             mission_count_update = True
         if mission_count_update:
             mission_count_update = False
