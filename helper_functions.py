@@ -28,11 +28,11 @@ def module_setup():
     # Set up tesseract
     # TODO?: Pull this out into user settings so users/devs can set the path easily
     tesseract_path = None
-    potential_paths = [os.path.join("C:", "Program Files", "Tesseract-OCR", "tesseract.exe")]
+    potential_paths = [os.path.join("C:\\", "Program Files", "Tesseract-OCR", "tesseract.exe")]
     # Use list comprehension to generate paths of the form
     # "D:/Tesseract-OCR/tesseract.exe" for all possible drive letters
     potential_paths.extend(
-                       [os.path.join("{}:".format(drive_letter), "Tesseract-OCR", "tesseract.exe") for drive_letter in ALPHABET]
+                       [os.path.join("{}:\\".format(drive_letter), "Tesseract-OCR", "tesseract.exe") for drive_letter in ALPHABET]
                        )
     logging.debug("Potential paths: {}".format(potential_paths))
     for _path in potential_paths:
@@ -41,7 +41,7 @@ def module_setup():
             tesseract_path = _path
             break
     if tesseract_path is None:
-        logging.error("No valid tesseract.exe was found")
+        raise NotImplementedError("No valid tesseract.exe was found")
     else:
         pytesseract.pytesseract.tesseract_cmd = tesseract_path
 
