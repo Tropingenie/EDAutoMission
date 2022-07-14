@@ -104,23 +104,25 @@ class OdysseyHelper:
 
     @classmethod
     def check_missions_accepted(cls):
-        mission_count = 0
+        mission_count = None
         # Open mission depot
         press('space', presses=2, interval=0.5)
         sleep(5)  # Delay to account for load time
 
-        # If the mission depot doesn't exist, then 0 missions
-        if "MISSION DEPOT" not in ocr_screen_location(
+        mission_depot_text = ocr_screen_location(
             [
                 int(2956*screenWidth/3840),
                 int(1720*screenHeight/2160),
                 int(400*screenWidth/3840),
                 int(80*screenWidth/2160)
             ]
-        ):
-            return 0
+        )
 
-        else: # Open mission depot
+        # If the mission depot doesn't exist, then 0 missions
+        if "MISSION DEPOT" not in mission_depot_text:
+            mission_count = 0
+
+        elif "MISSION DEPOT" in mission_depot_text: # Open mission depot
             press('d', presses=3, interval=0.3)
             press('s', presses=1, interval=0.3)
             press('space', presses=1, interval=0.3)
@@ -128,7 +130,10 @@ class OdysseyHelper:
             while not cls.at_bottom():
                 mission_count += 1
                 cls.next_mission()
-            press('backspace', presses=2, interval=0.3)
+
+        assert mission_count is not None, "OCR Failure"
+
+        press('backspace', presses=2, interval=0.3) # Return to starport services
 
         cls.back_button_original = None
         cls.missions_seen = 0
