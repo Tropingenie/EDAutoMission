@@ -5,6 +5,7 @@
 # minutes) in a DLC agnostic manner.
 
 import logging
+from sys import exit
 from time import sleep, localtime 
 from queue import Empty
 from platform import system
@@ -18,22 +19,24 @@ if system() == "Windows":
 def _main(game_interaction):
     missions = 0
 
-    def _accept_mission(mission_type):
+    def _accept_mission(mission_type, missions):
         logging.info("{} mission detected. Accepting...".format(mission_type))
         game_interaction.accept_mission()
         missions += 1
+        return missions
 
     logging.info("Checking missions...")
 
     game_interaction.open_missions_board()
     while not game_interaction.at_bottom():
         mission_text = game_interaction.ocr_mission()
+        # if True: # DEBUG
         if "BERT" in mission_text:
-            _accept_mission("Bertrandite")
+              missions = _accept_mission("Bertrandite", missions)
         elif "GOLD" in mission_text:
-            _accept_mission("Gold")
+            missions = _accept_mission("Gold", missions)
         elif "SILVER" in mission_text:
-            _accept_mission("Silver")
+            missions = _accept_mission("Silver", missions)
 
         game_interaction.next_mission()
     # Note: at_bottom() must be set up to avoid an off by one error
@@ -46,7 +49,8 @@ def main():
     missions = 0
     helper_functions.module_setup()
     if not helper_functions.game_running():
-        raise OSError("Elite: Dangerous not running!")
+        logging.error("Elite: Dangerous not running!")
+        # exit()
 
     try:
         raise OSError("Win 11 debug")
@@ -69,6 +73,7 @@ def main():
         import horizons as game_interaction
         logging.info("Operating in Horizons mode")
     elif game_mode == "odyssey":
+    # if True: # DEBUG
         from odyssey import OdysseyHelper as game_interaction
         logging.info("Operating in Odyssey mode")
 
