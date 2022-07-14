@@ -15,8 +15,6 @@ if system() == "Windows":
     from pywintypes import error as PyWinError
     from tab_to import tab_to
 
-
-
 def _main(game_interaction):
     missions = 0
 
@@ -55,10 +53,11 @@ def main():
             tab_to("Elite.+Dangerous.+CLIENT")
             sleep(1)
         else:
-            raise OSError("Automatic alt tab only works on Windows")
-    except (PyWinError, OSError) as e:
+            raise OSError("Automatic alt tab only works on Windows. Please focus on the Elite window before timer expires.")
+    except PyWinError as e:
         logging.debug("Excepted PyWinError: {}".format(e))
-        logging.info("Please focus on the Elite window before timer expires.")
+    except OSError as e:
+        logging.info(e)
         i = 5
         while i >= 0:
             logging.info("Starting script in: {}".format(i))
@@ -67,10 +66,10 @@ def main():
 
     game_mode = helper_functions.game_mode()
     if game_mode == "horizons":
-        import horizons as game_interaction
+        import horizons_helper as game_interaction
         logging.info("Operating in Horizons mode")
     elif game_mode == "odyssey":
-        from odyssey import OdysseyHelper as game_interaction
+        from odyssey_helper import OdysseyHelper as game_interaction
         logging.info("Operating in Odyssey mode")
 
     missions = game_interaction.check_missions_accepted()
