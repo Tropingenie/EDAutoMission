@@ -127,6 +127,7 @@ class OdysseyHelper:
             press('s', presses=1, interval=0.3)
             press('space', presses=1, interval=0.3)
 
+            mission_count = 0
             while not cls.at_bottom():
                 mission_count += 1
                 cls.next_mission()
