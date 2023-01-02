@@ -67,7 +67,7 @@ def main():
             sleep(1)
             i -= 1
 
-    game_mode = helper_functions.game_mode()
+    game_mode = "odyssey"# helper_functions.game_mode() # HARD CODED DO NOT COMMIT
     if game_mode == "horizons":
         import horizons as game_interaction
         logging.info("Operating in Horizons mode")
