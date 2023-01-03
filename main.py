@@ -5,6 +5,7 @@
 # minutes) in a DLC agnostic manner.
 
 import logging
+from sys import exit
 from time import sleep, localtime 
 from queue import Empty
 from platform import system
@@ -18,22 +19,24 @@ if system() == "Windows":
 def _main(game_interaction):
     missions = 0
 
-    def _accept_mission(mission_type):
+    def _accept_mission(mission_type, missions):
         logging.info("{} mission detected. Accepting...".format(mission_type))
         game_interaction.accept_mission()
         missions += 1
+        return missions
 
     logging.info("Checking missions...")
 
     game_interaction.open_missions_board()
     while not game_interaction.at_bottom():
         mission_text = game_interaction.ocr_mission()
+        # if True: # DEBUG
         if "BERT" in mission_text:
-            _accept_mission("Bertrandite")
+              missions = _accept_mission("Bertrandite", missions)
         elif "GOLD" in mission_text:
-            _accept_mission("Gold")
+            missions = _accept_mission("Gold", missions)
         elif "SILVER" in mission_text:
-            _accept_mission("Silver")
+            missions = _accept_mission("Silver", missions)
 
         game_interaction.next_mission()
     # Note: at_bottom() must be set up to avoid an off by one error
@@ -46,9 +49,11 @@ def main():
     missions = 0
     helper_functions.module_setup()
     if not helper_functions.game_running():
-        raise OSError("Elite: Dangerous not running!")
+        logging.error("Elite: Dangerous not running!")
+        # exit()
 
     try:
+        raise OSError("Win 11 debug")
         if system() == "Windows":
             tab_to("Elite.+Dangerous.+CLIENT")
             sleep(1)
@@ -64,7 +69,7 @@ def main():
             sleep(1)
             i -= 1
 
-    game_mode = helper_functions.game_mode()
+    game_mode = "odyssey"# helper_functions.game_mode() # HARD CODED DO NOT COMMIT
     if game_mode == "horizons":
         import horizons_helper as game_interaction
         logging.info("Operating in Horizons mode")
@@ -91,7 +96,7 @@ def main():
         # To check every 10 minutes, we look when the clock reads the 5 minute mark
         # e.g. for 1:55, time.gmtime()[4] will be 55, 55+5=60, 60%10 == 0
         if ((localtime()[4] + 5) % 10 == 0):
-            missions += _main(game_interaction)
+            missions += _main(game_interaction) # debug
             mission_count_update = True
         if mission_count_update:
             mission_count_update = False
