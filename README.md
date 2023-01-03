@@ -44,7 +44,13 @@ To prematurely exit the program:
 ## Roadmap/Plans
 (Subject to change, though if its possible by my knowledge it will be added)
   - Have a GUI and standalone application
+    - User input of Tesseract binary file path
+    - User selection of Horizons/Odyssey
   - Add configurations for missions of other commodities/types
   - Horizons support (in progress)
   - Extend support to aspect ratios other than 16:9 (in testing)
   - Extend support to cockpit colors other than the default (in testing)
+  - Code ruggedization
+    - Improve reliability of mse difference detection for exiting mission board
+    - Improve reliability and simplicity of internal mission count
+    - Remove hard coding of mission names and implement more generic detection
