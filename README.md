@@ -2,6 +2,8 @@
 Automatically accepts missions of a type
 (This is a work in progress so expect bugs)
 
+> This code is provided for archival purposes only. You are welcome to fork and continue development under the license terms. However, it is provided as-is, with no liability or warranty.
+
 ## Installation
 There are two ways to run the program: As a python script, or the built code. The raw python supports both command-line and gui control, while the built .exe only can be run through the gui. 
 
