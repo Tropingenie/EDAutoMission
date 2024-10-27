@@ -12,6 +12,14 @@ from platform import system
 
 import helper_functions
 
+# Stores what missions the script looks for
+missions_needed = [
+    # [Text to detect, mission type]
+    ["BERT", "Bertrandte"],
+    ["GOLD", "Gold"],
+    ["SILVER", "Silver"],
+]
+
 if system() == "Windows":
     from pywintypes import error as PyWinError
     from tab_to import tab_to
@@ -31,12 +39,10 @@ def _main(game_interaction):
     while not game_interaction.at_bottom():
         mission_text = game_interaction.ocr_mission()
         # if True: # DEBUG
-        if "BERT" in mission_text:
-              missions = _accept_mission("Bertrandite", missions)
-        elif "GOLD" in mission_text:
-            missions = _accept_mission("Gold", missions)
-        elif "SILVER" in mission_text:
-            missions = _accept_mission("Silver", missions)
+
+        for mission in missions_needed:
+            if mission[0] in mission_text:
+                missions = _accept_mission(mission[1], missions)
 
         game_interaction.next_mission()
     # Note: at_bottom() must be set up to avoid an off by one error
@@ -108,6 +114,18 @@ def main():
             )
         sleep(20) # Slows loop rate to thrice per minute
 
+
+#Add mission check to missions_needed
+def addMission(missionDetection, missionType):
+    missions_needed.append([missionDetection, missionType])
+
+#Remove mission check from missions_needed
+def removeMission(missionData):
+    missions_needed.remove(missionData)
+
+#Fetch all missions
+def getMissions():
+    return missions_needed
+
 if __name__ == "__main__":
     main()
-

@@ -11,7 +11,6 @@ from numpy import array
 from numpy import sum as array_sum
 
 from helper_functions import screenHeight, screenWidth, ocr_screen_location
-from horizons import at_bottom, next_mission
 
 class OdysseyHelper:
     missions_seen = 0
