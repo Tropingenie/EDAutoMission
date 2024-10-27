@@ -2,7 +2,15 @@
 Automatically accepts missions of a type
 (This is a work in progress so expect bugs)
 
-> This code is provided for archival purposes only. You are welcome to fork and continue development under the license terms. However, it is provided as-is, with no liability or warranty.
+This code is provided for archival purposes only. You are welcome to fork and continue development under the license terms.
+
+> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 ## Installation
 There are two ways to run the program: As a python script, or the built code. The raw python supports both command-line and gui control, while the built .exe only can be run through the gui. 
